@@ -8,3 +8,6 @@ logs/
 __pycache__/
 .env
 venv/
+# Ignore DuckDB database files
+*.duckdb
+*.duckdb.wal
