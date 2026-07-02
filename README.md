@@ -5,9 +5,13 @@
 This project implements a small analytics lakehouse for NYC Yellow Taxi trips using dbt + DuckDB, following a clean Raw → Silver → Gold modelling pattern. It ingests month partitioned TLC trip data from S3, applies cleaning rules, builds a star schema, and produces analyst friendly KPIs.
 
 **S3 Bucket & File Details**
-Bucket Name      yellow-taxi-trip-2024
-AWS Region         eu-west-2 (London)
-Bucket Console URL https://eu-west-2.console.aws.amazon.com/s3/buckets/yellow-taxi-trip-2024?region=eu-west-2
+
+        •	Bucket Name   yellow-taxi-trip-2024
+        
+        •	AWS Region       eu-west-2 (London)
+        
+        •	Bucket Console  URL https://eu-west-2.console.aws.amazon.com/s3/buckets/yellow-taxi-trip-2024?region=eu-west-2
+
 
 Files Stored in S3. S3 Paths Used in dbt Models
 **File Name	Format	Size	Uploaded	Notes**
@@ -24,51 +28,74 @@ yellow_tripdata_2024-04.parquet	Parquet	56.4 MB	Jul 1, 2026	April trips (used fo
 •	s3://yellow-taxi-trip-2024/yellow_tripdata_2024-04.parquet
 •	s3://yellow-taxi-trip-2024/taxi_zone_lookup.csv
 
-** IAM User & Permissions (dbtuser)**
+**IAM User & Permissions ** (dbtuser)
 To allow dbt + DuckDB to read S3 files, an IAM user named dbtuser was created.
+
 I.	Steps Performed
-1. Create IAM User
-•	IAM → Users → Create user
-•	Username: dbtuser
-2. Attach S3 Read Policy
-In Permissions → Add Permissions → Attach Policies:
-AmazonS3ReadOnlyAccess
-This allows dbtuser to:
-•	List bucket contents
-•	Read objects
-•	Use S3 API calls required by DuckDB
-3. Generate Access Keys
-IAM → dbtuser → Security Credentials → Create Access Key
-You receive:
-•	Access Key ID
-•	Secret Access Key
-Important: AWS shows the Secret Key only once. It must be downloaded and stored securely.
-4. Set Credentials in Windows Environment
-setx AWS_ACCESS_KEY_ID "<your-access-key-id>"
-setx AWS_SECRET_ACCESS_KEY "<your-secret-access-key>"
-Restart terminal → activate venv → run dbt.
-✔ dbt automatically picks up these credentials
-DuckDB’s httpfs extension uses them to authenticate S3 reads.
+
+    1. Create IAM User
+        •	IAM → Users → Create user
+        •	Username: dbtuser
+        
+    2. Attach S3 Read Policy
+        In Permissions → Add Permissions → Attach Policies:
+        AmazonS3ReadOnlyAccess
+        This allows dbtuser to:
+            •	List bucket contents
+            •	Read objects
+            •	Use S3 API calls required by DuckDB         
+    3. Generate Access Keys
+        IAM → dbtuser → Security Credentials → Create Access Key
+        You receive:
+        •	Access Key ID
+        •	Secret Access Key
+        Important: AWS shows the Secret Key only once. It must be downloaded and stored securely.
+
+    4. Set Credentials in Windows Environment
+                   •	setx AWS_ACCESS_KEY_ID "<your-access-key-id>"
+                   •	setx AWS_SECRET_ACCESS_KEY "<your-secret-access-key>"
+            Restart terminal → activate venv → run dbt.
+            dbt automatically picks up these credentials
+            DuckDB’s httpfs extension uses them to authenticate S3 reads.
 
 **Project Structure**
-yellow_taxitrip_repo/
-models/
-raw/                # Raw S3 ingestion models
-staging/            # Silver cleaned models
-marts/              # Gold star schema 
-analytics/          # Analyst-friendly SQL queries + KPI tables
-tests/
-data_quality_checks.sql
-schema.yml          # dbt tests
-data/
-nyc_taxi.duckdb
-README.md  
-ERD.md 
+
+                yellow_taxitrip_repo/
+                
+                models/
+                
+                raw/                # Raw S3 ingestion models
+                
+                staging/            # Silver cleaned models
+                
+                marts/              # Gold star schema 
+                
+                analytics/          # Analyst-friendly SQL queries + KPI tables
+                
+                tests/
+                
+                data_quality_checks.sql
+                
+                schema.yml          # dbt tests
+                
+                data/
+                
+                nyc_taxi.duckdb
+                
+                README.md  
+                
+                ERD.md 
+                
+
 
 **II.	Setup Instructions**
+
 **1. Clone the repo**
-git clone https://github.com/suganyakumaravelu-commits/yellow_taxitrip_repo.git
-cd yellow_taxitrip_repo
+
+        •	git clone https://github.com/suganyakumaravelu-commits/yellow_taxitrip_repo.git
+
+        •	cd yellow_taxitrip_repo
+
 **2. Create Python 3.11 virtual environment**
 py -3.11 -m venv venv
 venv\Scripts\activate.bat
