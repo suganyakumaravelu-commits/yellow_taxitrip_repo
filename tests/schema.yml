@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: silver_yellow_tripdata
+    tests:
+      - not_null:
+          column_name: pickup_ts
+      - not_null:
+          column_name: pulocationid
+      - not_null:
+          column_name: dolocationid
+      - accepted_values:
+          column_name: payment_type
+          values: [1, 2, 3, 4, 5, 6]  # TLC codes
+      - relationships:
+          column_name: pulocationid
+          to: dim_zone
+          field: zone_id
+
+  - name: fact_trip
+    tests:
+      - not_null:
+          column_name: pickup_date
+      - not_null:
+          column_name: trip_distance
+      - not_null:
+          column_name: fare_amount
